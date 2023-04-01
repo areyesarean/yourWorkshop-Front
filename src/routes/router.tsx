@@ -4,16 +4,16 @@ import {
   Navigate,
   Route,
 } from "react-router-dom";
-import { Login } from "../pages/Login";
-import { Dashboard } from "../pages/Dashboard";
-import { NotFoundPage } from "../components/NotFoundPage";
 import { PrivateRoute, PublicRoute } from "./paths";
 import AuthGuard from "./guards/AuthGuard";
 import RolGuard from "./guards/RolGuard";
+import PublicGuard from "./guards/PublicGuard";
 import { Users } from "../pages/Users";
 import { Admin } from "../pages/Admin";
-import PublicGuard from "./guards/PublicGuard";
+import { Login } from "../pages/Login";
+import { Dashboard } from "../pages/Dashboard";
 import { UserList } from "../components/UserList";
+import { NotFoundPage } from "../components/NotFoundPage";
 
 // You can do this:
 export const router = createBrowserRouter(
@@ -33,7 +33,7 @@ export const router = createBrowserRouter(
           <Route element={<RolGuard rol="ADMIN" />}>
             <Route index element={<Navigate to={PrivateRoute.ADMIN} />} />
             <Route path={PrivateRoute.ADMIN} element={<Admin />} />
-            <Route path={PrivateRoute.USERLIST} element={<UserList />} />
+            <Route path={PrivateRoute.USER_LIST} element={<UserList />} />
           </Route>
           {/* ROL USER */}
           <Route element={<RolGuard rol="USER" />}>
@@ -88,7 +88,7 @@ export const routeres = createBrowserRouter([
                     element: <Admin />,
                   },
                   {
-                    path: PrivateRoute.USERLIST,
+                    path: PrivateRoute.USER_LIST,
                     element: <UserList />,
                   },
                 ],

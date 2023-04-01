@@ -14,4 +14,5 @@ const RolGuard = ({ rol }: RolGuardProp) => {
   }
   return <Navigate to={`${userRols.toLowerCase()}`} />;
 };
+
 export default RolGuard;

@@ -1,6 +1,8 @@
 export const PublicRoute = {
   PUBLIC: "/",
   LOGIN: "login",
+  FORGOT_PASSWORD: "forgot-password",
+  CREATE_ACCOUNT: "create-account",
 };
 
 export const PrivateRoute = {
@@ -8,5 +10,5 @@ export const PrivateRoute = {
   DASHBOARD: "dashboard",
   ADMIN: "admin",
   USER: "user",
-  USERLIST: "userlist"
+  USER_LIST: "userlist"
 };

@@ -5,10 +5,9 @@ import { PublicRoute } from "../paths";
 
 const AuthGuard = () => {
   const {username, rol} = useSelector((state: RootState) => state.auth);
-  console.log("🚀 ~ file: AuthGuard.tsx:8 ~ AuthGuard ~ rol:", rol)
   
   if (!username) {
-    return <Navigate to={"/"} />;
+    return <Navigate to={PublicRoute.PUBLIC} />;
   }
   return <Outlet />;
 };
