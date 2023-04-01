@@ -3,12 +3,16 @@ import { login, logout } from "../../redux/slices/AuthSlice";
 import { RootState } from "../../redux/store";
 
 const Login = () => {
-  const user = useSelector((state: RootState) => state.auth.user);
+  const user = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
 
   const loginUser = () => {
-    dispatch(login("areyesarean"));
+    dispatch(login({ username: "areyesarean", rol: "USER" }));
   };
+  const loginAdmin = () => {
+    dispatch(login({ username: "areyesarean", rol: "ADMIN" }));
+  };
+
   const logoutUser = () => {
     dispatch(logout());
   };
@@ -16,10 +20,13 @@ const Login = () => {
   return (
     <main>
       <h3>Login</h3>
-      {user ? (
+      {user.username ? (
         <button onClick={logoutUser}>Logout</button>
       ) : (
-        <button onClick={loginUser}>Login</button>
+        <>
+          <button onClick={loginAdmin}>Login ADMIN</button>
+          <button onClick={loginUser}>Login USER</button>
+        </>
       )}
     </main>
   );
