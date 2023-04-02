@@ -10,19 +10,15 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { Visibility, VisibilityOff, Email } from "@mui/icons-material";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import { Copyright } from "../../components/Copyright";
-import FormHelperText from "@mui/material/FormHelperText";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { login } from "../../redux/slices/AuthSlice";
-import FormControlInput from "../../components/FormControl/FormControl";
+import { FormControlInput } from "../../components/FormControlInput";
 
 const schema = yup
   .object({
@@ -53,6 +49,7 @@ export default function Login() {
   });
 
   const onSubmit = (data: FormData) => {
+    //TODO LOGIN HERE
     console.log(data);
     dispatch(login({ username: "areyesarean", rol: "USER" }));
   };

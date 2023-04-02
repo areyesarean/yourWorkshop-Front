@@ -10,7 +10,7 @@ interface FormControlProps {
   labelInput: string;
   labelText: string;
   showError: boolean;
-  errorMessage: any;
+  errorMessage: string | undefined;
   register: any;
   autoFocus?: boolean
   children: React.ReactNode;
