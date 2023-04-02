@@ -3,7 +3,6 @@ import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
-import { UseFormRegister } from "react-hook-form/dist/types";
 
 interface FormControlProps {
   name: string;
