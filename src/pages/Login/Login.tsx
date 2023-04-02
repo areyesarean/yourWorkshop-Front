@@ -1,37 +1,3 @@
-// import { useDispatch, useSelector } from "react-redux";
-// import { login, logout } from "../../redux/slices/AuthSlice";
-// import { RootState } from "../../redux/store";
-
-// const Login = () => {
-//   const user = useSelector((state: RootState) => state.auth);
-//   const dispatch = useDispatch();
-
-//   const loginUser = () => {
-//     dispatch(login({ username: "areyesarean", rol: "USER" }));
-//   };
-//   const loginAdmin = () => {
-//     dispatch(login({ username: "areyesarean", rol: "ADMIN" }));
-//   };
-
-//   const logoutUser = () => {
-//     dispatch(logout());
-//   };
-
-//   return (
-//     <main>
-//       <h3>Login asdasd asdasd</h3>
-//       {user.username ? (
-//         <button onClick={logoutUser}>Logout</button>
-//       ) : (
-//         <>
-//           <button onClick={loginAdmin}>Login ADMIN</button>
-//           <button onClick={loginUser}>Login USER</button>
-//         </>
-//       )}
-//     </main>
-//   );
-// };
-// export default Login;
 import { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -56,6 +22,7 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { login } from "../../redux/slices/AuthSlice";
+import FormControlInput from "../../components/FormControl/FormControl";
 
 const schema = yup
   .object({
@@ -86,7 +53,7 @@ export default function Login() {
   });
 
   const onSubmit = (data: FormData) => {
-    console.log(data)
+    console.log(data);
     dispatch(login({ username: "areyesarean", rol: "USER" }));
   };
 
@@ -119,63 +86,43 @@ export default function Login() {
           noValidate
           sx={{ mt: 1 }}
         >
-          <FormControl
-            error={errors.email !== undefined ? true : false}
-            variant="outlined"
-            fullWidth
-            margin="normal"
+          <FormControlInput
+            name="email"
+            inputType="email"
+            labelText="Email"
+            autoFocus={true}
+            register={register("email")}
+            labelInput="email"
+            showError={errors.email !== undefined ? true : false}
+            errorMessage={errors.email?.message}
           >
-            <InputLabel htmlFor="email">Email</InputLabel>
-            <OutlinedInput
-              id="email"
-              type="text"
-              {...register("email")}
-              label="Email"
-              autoComplete="email"
-              autoFocus
-              aria-describedby="component-error-text"
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton onMouseDown={handleMouseDownPassword} edge="end">
-                    <Email aria-disabled />
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
-            <FormHelperText id="component-error-text">
-              {errors.email?.message}
-            </FormHelperText>
-          </FormControl>
+            <InputAdornment position="end">
+              <IconButton onMouseDown={handleMouseDownPassword} edge="end">
+                <Email aria-disabled />
+              </IconButton>
+            </InputAdornment>
+          </FormControlInput>
 
-          <FormControl
-            error={errors.password !== undefined ? true : false}
-            variant="outlined"
-            fullWidth
-            margin="normal"
+          <FormControlInput
+            name="password"
+            inputType={showPassword ? "text" : "password"}
+            labelText="Password"
+            register={register("password")}
+            labelInput="password"
+            showError={errors.password !== undefined ? true : false}
+            errorMessage={errors.password?.message}
           >
-            <InputLabel htmlFor="password">Password</InputLabel>
-            <OutlinedInput
-              id="password"
-              {...register("password")}
-              type={showPassword ? "text" : "password"}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              label="Password"
-            />
-            <FormHelperText id="component-error-text">
-              {errors.password?.message}
-            </FormHelperText>
-          </FormControl>
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={handleClickShowPassword}
+                onMouseDown={handleMouseDownPassword}
+                edge="end"
+              >
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          </FormControlInput>
 
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
