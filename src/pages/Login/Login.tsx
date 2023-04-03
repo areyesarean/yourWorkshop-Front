@@ -17,8 +17,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
+import axios, { AxiosError } from "axios";
 import { login } from "../../redux/slices/AuthSlice";
 import { FormControlInput } from "../../components/FormControlInput";
+import { useMutation } from "@tanstack/react-query";
+import { ApiError, Response } from "../../types/types";
+import { baseUrl } from "../../utils/constants";
 
 const schema = yup
   .object({
@@ -37,7 +41,7 @@ const schema = yup
 
 type FormData = yup.InferType<typeof schema>;
 
-export default function Login() {
+const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
   const {
@@ -48,10 +52,18 @@ export default function Login() {
     resolver: yupResolver(schema),
   });
 
+  const mutation = useMutation<Response, AxiosError<ApiError>, FormData>({
+    mutationFn: (loginData) => {
+      return axios.post(`${baseUrl}/login`, loginData);
+    },
+    onSuccess: (data) => {
+      console.log(data.data.access_token);
+      dispatch(login({ username: "areyesarean", rol: "ADMIN" }));
+    },
+  });
+
   const onSubmit = (data: FormData) => {
-    //TODO LOGIN HERE
-    console.log(data);
-    dispatch(login({ username: "areyesarean", rol: "ADMIN" }));
+    mutation.mutate(data);
   };
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -77,6 +89,26 @@ export default function Login() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
+
+        {mutation.isLoading && (
+          <Typography component="h1" variant="h5">
+            Verificando sus credenciales...
+          </Typography>
+        )}
+
+        {mutation.isError && (
+          <Typography component="h6" variant="h6" color="#EF5350">
+            {mutation.error?.response?.data?.message}
+          </Typography>
+        )}
+
+        {mutation.status === "error" && (
+          <Typography component="h6" variant="h6" color="#EF5350">
+            {mutation.error?.message === "Network Error" &&
+              "Upss! ha ocurrido un error de red"}
+          </Typography>
+        )}
+
         <Box
           component="form"
           onSubmit={handleSubmit(onSubmit)}
@@ -150,4 +182,6 @@ export default function Login() {
       <Copyright />
     </Container>
   );
-}
+};
+
+export default Login;
