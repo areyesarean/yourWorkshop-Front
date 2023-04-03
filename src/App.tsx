@@ -1,9 +1,8 @@
-import "./App.css";
+import { Suspense } from "react";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./routes/router";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import { Suspense } from "react";
 
 const darkTheme = createTheme({
   palette: {
@@ -21,6 +20,5 @@ function App() {
     </Suspense>
   );
 }
-1;
 
 export default App;

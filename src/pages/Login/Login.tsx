@@ -51,7 +51,7 @@ export default function Login() {
   const onSubmit = (data: FormData) => {
     //TODO LOGIN HERE
     console.log(data);
-    dispatch(login({ username: "areyesarean", rol: "USER" }));
+    dispatch(login({ username: "areyesarean", rol: "ADMIN" }));
   };
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
