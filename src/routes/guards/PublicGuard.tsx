@@ -3,10 +3,12 @@ import { RootState } from "../../redux/store";
 import { Navigate, Outlet } from "react-router-dom";
 
 const PublicGuard = () => {
-  const {username, rol} = useSelector((state: RootState) => state.auth);
+  const { user } = useSelector((state: RootState) => state.auth);
 
-  if (username) {
-    return <Navigate replace to={`/private/dashboard/${rol.toLowerCase()}`} />;
+  if (user && user.active) {
+    return (
+      <Navigate replace to={`/private/dashboard/${user.rol.toLowerCase()}`} />
+    );
   }
   return <Outlet />;
 };

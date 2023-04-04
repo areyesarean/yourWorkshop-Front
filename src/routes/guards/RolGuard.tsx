@@ -8,11 +8,11 @@ interface RolGuardProp {
 }
 
 const RolGuard = ({ rol }: RolGuardProp) => {
-  const { rol: userRols } = useSelector((state: RootState) => state.auth);
-  if (userRols === rol) {
+  const { user } = useSelector((state: RootState) => state.auth);
+  if (user?.rol === rol) {
     return <Outlet />;
   }
-  return <Navigate to={`${userRols.toLowerCase()}`} />;
+  return <Navigate to={`${user?.rol.toLowerCase()}`} />;
 };
 
 export default RolGuard;

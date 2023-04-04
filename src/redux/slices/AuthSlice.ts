@@ -1,14 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
+import { User } from "../../types/types";
+import {
+  getPayloadFromTokenInLocalStorage,
+  removeTokenFromLocalStorage,
+  setTokenToLocalStorage,
+} from "../../services/localStorageService";
 
 export interface AuthState {
-  username: string;
-  rol: string
+  user: User | null;
 }
 
 const initialState: AuthState = {
-  username: window.localStorage.getItem("username") || "",
-  rol: window.localStorage.getItem("rol") || "",
+  user: getPayloadFromTokenInLocalStorage(),
 };
 
 export const AuthSlice = createSlice({
@@ -16,17 +19,13 @@ export const AuthSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action) => {
-      console.log(action);
-      
-      state.username = action.payload.username;
-      state.rol = action.payload.rol;
-      window.localStorage.setItem("username", action.payload.username);
-      window.localStorage.setItem("rol",  action.payload.rol);
+      const { access_token } = action.payload;
+      setTokenToLocalStorage(access_token);
+      state.user = getPayloadFromTokenInLocalStorage();
     },
     logout: (state) => {
-      state = {username: "", rol: ""}
-      window.localStorage.removeItem("username");
-      window.localStorage.removeItem("rol");
+      removeTokenFromLocalStorage();
+      state.user = null;
     },
   },
 });

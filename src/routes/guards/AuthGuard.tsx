@@ -4,9 +4,9 @@ import { Navigate, Outlet } from "react-router-dom";
 import { PublicRoute } from "../paths";
 
 const AuthGuard = () => {
-  const {username, rol} = useSelector((state: RootState) => state.auth);
-  
-  if (!username) {
+  const { user } = useSelector((state: RootState) => state.auth);
+
+  if (!user || !user.active) {
     return <Navigate to={PublicRoute.PUBLIC} />;
   }
   return <Outlet />;
