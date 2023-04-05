@@ -3,22 +3,28 @@ import { RouterProvider } from "react-router-dom";
 import { router } from "./routes/router";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import CircularProgress from "@mui/material/CircularProgress";
+import { SpinnerSuspense } from "./components/SpinnerSuspense";
 
 const darkTheme = createTheme({
+  typography: {
+    fontFamily: "Lilex",
+  },
   palette: {
-    mode: "light",
+    mode: "dark",
+    primary: {
+      main: "#5DFDCB",
+    },
   },
 });
 
 function App() {
   return (
-    <Suspense fallback={<CircularProgress color="inherit" />}>
-      <ThemeProvider theme={darkTheme}>
-        <CssBaseline />
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
+      <Suspense fallback={<SpinnerSuspense />}>
         <RouterProvider router={router} />
-      </ThemeProvider>
-    </Suspense>
+      </Suspense>
+    </ThemeProvider>
   );
 }
 

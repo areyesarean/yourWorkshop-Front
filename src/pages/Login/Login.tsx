@@ -165,12 +165,12 @@ const Login = () => {
               Acceder
             </Button>
             <Grid container>
-              <Grid item xs>
+              <Grid item xs={12} md={6} lg={6} sm={6}>
                 <Link href="#" variant="body2">
                   Olvidó su contraseña?
                 </Link>
               </Grid>
-              <Grid item>
+              <Grid item xs={12} md={6} lg={6} sm={6}>
                 <Link href="#" variant="body2">
                   {"No tienes cuenta? Crea una"}
                 </Link>
