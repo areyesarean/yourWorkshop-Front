@@ -11,6 +11,7 @@ import RolGuard from "./guards/RolGuard";
 import PublicGuard from "./guards/PublicGuard";
 import { NotFoundPage } from "../components/NotFoundPage";
 import { ForgotPassword } from "../pages/ForgotPassword";
+import { CreateAccount } from "../pages/CreateAccount";
 
 const Login = lazy(() => import("../pages/Login/Login"))
 const Dashboard = lazy(() => import("../pages/Dashboard/Dashboard"))
@@ -27,6 +28,7 @@ export const router = createBrowserRouter(
         <Route index element={<Navigate to={PublicRoute.LOGIN} />} />
         <Route path={PublicRoute.LOGIN} element={<Login />} />
         <Route path={PublicRoute.FORGOT_PASSWORD} element={<ForgotPassword />} />
+        <Route path={PublicRoute.CREATE_ACCOUNT} element={<CreateAccount />} />
       </Route>
 
       {/* PRIVATE ROUTES */}
