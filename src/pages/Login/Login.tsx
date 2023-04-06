@@ -3,7 +3,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -25,6 +24,8 @@ import { ApiError, Response } from "../../types/types";
 import { baseUrl } from "../../utils/constants";
 import { TransitionAlerts } from "../../components/Alert";
 import { SpinnerLinear } from "../../components/SpinnerLinear";
+import { Link } from "react-router-dom";
+import { PublicRoute } from "../../routes/paths";
 
 const schema = yup
   .object({
@@ -166,12 +167,12 @@ const Login = () => {
             </Button>
             <Grid container>
               <Grid item xs={12} md={6} lg={6} sm={6}>
-                <Link href="#" variant="body2">
+                <Link to={`/${PublicRoute.FORGOT_PASSWORD}`}>
                   Olvidó su contraseña?
                 </Link>
               </Grid>
               <Grid item xs={12} md={6} lg={6} sm={6}>
-                <Link href="#" variant="body2">
+                <Link to={PublicRoute.CREATE_ACCOUNT}>
                   {"No tienes cuenta? Crea una"}
                 </Link>
               </Grid>
