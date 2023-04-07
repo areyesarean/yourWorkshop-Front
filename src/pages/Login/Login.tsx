@@ -172,7 +172,7 @@ const Login = () => {
                 </Link>
               </Grid>
               <Grid item xs={12} md={6} lg={6} sm={6}>
-                <Link to={PublicRoute.CREATE_ACCOUNT}>
+                <Link to={`/${PublicRoute.CREATE_ACCOUNT}`}>
                   {"No tienes cuenta? Crea una"}
                 </Link>
               </Grid>
