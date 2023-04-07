@@ -12,9 +12,7 @@ import { Copyright } from "../../components/Copyright";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
 import axios, { AxiosError } from "axios";
-import { login } from "../../redux/slices/AuthSlice";
 import { FormControlInput } from "../../components/FormControlInput";
 import { useMutation } from "@tanstack/react-query";
 import { ApiError, Response } from "../../types/types";
@@ -38,7 +36,6 @@ const schema = yup
 type FormData = yup.InferType<typeof schema>;
 
 const ForgotPassword = () => {
-  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -49,11 +46,9 @@ const ForgotPassword = () => {
 
   const mutation = useMutation<Response, AxiosError<ApiError>, FormData>({
     mutationFn: (loginData) => {
-      return axios.post(`${baseUrl}/login`, loginData);
+      return axios.patch(`${baseUrl}/request-reset-password`, loginData);
     },
-    onSuccess: (data) => {
-      dispatch(login({ access_token: data.data.access_token }));
-    },
+    onSuccess: (data) => {},
   });
 
   const onSubmit = (data: FormData) => {
@@ -88,13 +83,27 @@ const ForgotPassword = () => {
           {mutation.isError && (
             <TransitionAlerts
               text={
-                mutation.error?.response?.data?.message ??
-                (mutation.error?.message === "Network Error"
-                  ? "Upss! ha ocurrido un error de red"
-                  : mutation.error?.message)
+                mutation.error?.response?.data?.message === "User not found"
+                  ? "El correo ingresado es incorrecto o no existe en nuestro sistema."
+                  : mutation.error?.response?.data?.message ??
+                    (mutation.error?.message === "Network Error"
+                      ? "Upss! ha ocurrido un error de red"
+                      : mutation.error?.message)
               }
               color="default"
               severity="error"
+              open={true}
+              variant="outlined"
+            />
+          )}
+
+          {mutation.isSuccess && (
+            <TransitionAlerts
+              text="Hemos enviado con éxito un enlace a su correo electrónico 
+                    para recuperar su contraseña. Por favor revise su bandeja 
+                    de entrada."
+              color="success"
+              severity="success"
               open={true}
               variant="outlined"
             />
@@ -109,10 +118,10 @@ const ForgotPassword = () => {
             <FormControlInput
               name="email"
               inputType="email"
-              labelText="Correo"
+              labelText="Correo de recuperación"
               autoFocus={true}
               register={register("email")}
-              labelInput="email"
+              labelInput="Correo de recuperación"
               showError={errors.email !== undefined ? true : false}
               errorMessage={errors.email?.message}
             >
@@ -133,12 +142,10 @@ const ForgotPassword = () => {
             </Button>
             <Grid container>
               <Grid item xs={12} md={5} lg={5} sm={5}>
-                <Link to={`/${PublicRoute.LOGIN}`}>
-                  Iniciar Sesión
-                </Link>
+                <Link to={`/${PublicRoute.LOGIN}`}>Iniciar Sesión</Link>
               </Grid>
               <Grid item xs={12} md={7} lg={7} sm={7}>
-                <Link to={PublicRoute.LOGIN}>
+                <Link to={`/${PublicRoute.CREATE_ACCOUNT}`}>
                   {"No tienes cuenta? Crea una"}
                 </Link>
               </Grid>
