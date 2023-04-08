@@ -91,8 +91,11 @@ const ChangePassword = () => {
           <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
-            Crear cuenta
+          <Typography component="h1" variant="h4">
+            Cambiar contraseña
+          </Typography>
+          <Typography component="p" m={2}>
+            Ingrese una nueva contraseña para su cuenta.
           </Typography>
 
           {mutation.isError && (
@@ -131,9 +134,9 @@ const ChangePassword = () => {
             <FormControlInput
               name="password"
               inputType={showPassword ? "text" : "password"}
-              labelText="Contraseña"
+              labelText="Contraseña nueva"
               register={register("password")}
-              labelInput="Contraseña"
+              labelInput="Contraseña nueva"
               showError={errors.password !== undefined ? true : false}
               errorMessage={errors.password?.message}
             >
@@ -177,7 +180,7 @@ const ChangePassword = () => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Crear cuenta
+              Cambiar contraseña
             </Button>
             <Grid container>
               <Grid
