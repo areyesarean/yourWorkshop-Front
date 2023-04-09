@@ -21,7 +21,7 @@ import { ApiError, Response } from "../../types/types";
 import { baseUrl } from "../../utils/constants";
 import { TransitionAlerts } from "../../components/Alert";
 import { SpinnerLinear } from "../../components/SpinnerLinear";
-import { Link } from "react-router-dom";
+import { Link, useLoaderData, useParams } from "react-router-dom";
 import { PublicRoute } from "../../routes/paths";
 
 const schema = yup
@@ -33,7 +33,11 @@ const schema = yup
     repeatPassword: yup
       .string()
       .required("Debe ingresar su contraseña")
-      .min(8, "La contraseña debe tener un mínimo de 8 caracteres"),
+      .min(8, "La contraseña debe tener un mínimo de 8 caracteres")
+      .oneOf(
+        [yup.ref("password")],
+        "La contraseña debe ser igual a la anterior"
+      ),
   })
   .required();
 
@@ -42,6 +46,8 @@ type FormData = yup.InferType<typeof schema>;
 const ChangePassword = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
+  const response = useLoaderData();
+  const params = useParams()
   const {
     register,
     handleSubmit,
@@ -49,12 +55,13 @@ const ChangePassword = () => {
   } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
-
+  console.log(response);
+  
   const mutation = useMutation<Response, AxiosError<ApiError>, FormData>({
-    mutationFn: (createAccountData) => {
-      return axios.post(`${baseUrl}/user`, {
-        ...createAccountData,
-        rol: "USER",
+    mutationFn: (data) => {
+      return axios.patch(`${baseUrl}/reset-password`, {
+        resetPasswordToken: params.resetPasswordToken,
+        newPassword: data.repeatPassword,
       });
     },
     onSuccess: (data) => {
@@ -63,6 +70,8 @@ const ChangePassword = () => {
   });
 
   const onSubmit = (data: FormData) => {
+    console.log(data);
+    
     mutation.mutate(data);
   };
 
@@ -115,8 +124,7 @@ const ChangePassword = () => {
 
           {mutation.isSuccess && (
             <TransitionAlerts
-              text="Su cuenta ha sido creada con éxito.
-              Hemos enviado un correo con un enlace para que pueda activarla. Por favor revise su correo electrónico"
+              text="Su contraseña ha sido cambiada con éxito."
               color="success"
               severity="success"
               open={true}
@@ -164,12 +172,12 @@ const ChangePassword = () => {
             >
               <InputAdornment position="end">
                 <IconButton
-                  aria-label="toggle password visibility"
+                  aria-label="toggle repeatPassword visibility"
                   onClick={handleClickShowRepeatPassword}
                   onMouseDown={handleMouseDownPassword}
                   edge="end"
                 >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                  {showRepeatPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
               </InputAdornment>
             </FormControlInput>

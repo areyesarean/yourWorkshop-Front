@@ -13,12 +13,14 @@ import { NotFoundPage } from "../components/NotFoundPage";
 import { ForgotPassword } from "../pages/ForgotPassword";
 import { CreateAccount } from "../pages/CreateAccount";
 import { ChangePassword } from "../pages/ChangePassword";
+import { VerifyUserByResetPassToken } from "./loaders/VerifyUserByResetPassToken";
+import NotFoundResetPasswordPage from "../components/NotFoundPage/NotFoundResetPasswordPage";
 
-const Login = lazy(() => import("../pages/Login/Login"))
-const Dashboard = lazy(() => import("../pages/Dashboard/Dashboard"))
-const Admin = lazy(() => import("../pages/Admin/Admin"))
-const User = lazy(() => import("../pages/Users/Users"))
-const UserList = lazy(() => import("../components/UserList/UserList"))
+const Login = lazy(() => import("../pages/Login/Login"));
+const Dashboard = lazy(() => import("../pages/Dashboard/Dashboard"));
+const Admin = lazy(() => import("../pages/Admin/Admin"));
+const User = lazy(() => import("../pages/Users/Users"));
+const UserList = lazy(() => import("../components/UserList/UserList"));
 
 // You can do this:
 export const router = createBrowserRouter(
@@ -28,9 +30,17 @@ export const router = createBrowserRouter(
       <Route path={PublicRoute.PUBLIC} element={<PublicGuard />}>
         <Route index element={<Navigate to={PublicRoute.LOGIN} />} />
         <Route path={PublicRoute.LOGIN} element={<Login />} />
-        <Route path={PublicRoute.FORGOT_PASSWORD} element={<ForgotPassword />} />
+        <Route
+          path={PublicRoute.FORGOT_PASSWORD}
+          element={<ForgotPassword />}
+        />
         <Route path={PublicRoute.CREATE_ACCOUNT} element={<CreateAccount />} />
-        <Route path={PublicRoute.CHANGE_PASSWORD_BY_FORGOT_PASS} element={<ChangePassword />} />
+        <Route
+          path={PublicRoute.CHANGE_PASSWORD_BY_FORGOT_PASS}
+          element={<ChangePassword />}
+          loader={VerifyUserByResetPassToken}
+          errorElement={<NotFoundResetPasswordPage/>}
+        />
       </Route>
 
       {/* PRIVATE ROUTES */}

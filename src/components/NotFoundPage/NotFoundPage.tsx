@@ -22,7 +22,7 @@ const NotFoundPage = () => {
     <div>
       <h4>Error</h4>
       <p>
-        <i>{error.statusText || error.error.message}</i>
+        {/* <i>{error.statusText || error.error.message}</i> */}
       </p>
     </div>
   )

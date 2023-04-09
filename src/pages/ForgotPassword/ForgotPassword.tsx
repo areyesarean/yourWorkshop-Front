@@ -48,7 +48,9 @@ const ForgotPassword = () => {
     mutationFn: (loginData) => {
       return axios.patch(`${baseUrl}/request-reset-password`, loginData);
     },
-    onSuccess: (data) => {},
+    onSuccess: (data) => {
+      console.log(data)
+    },
   });
 
   const onSubmit = (data: FormData) => {
