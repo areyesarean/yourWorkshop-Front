@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -46,6 +46,10 @@ type FormData = yup.InferType<typeof schema>;
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [cause, _] = useState(() =>
+    new URL(`${window.document.location}`).searchParams.get("cause")
+  );
+
   const dispatch = useDispatch();
   const {
     register,
@@ -93,6 +97,16 @@ const Login = () => {
           <Typography component="h1" variant="h5">
             Iniciar sesión
           </Typography>
+
+          {cause === "activate-account" && (
+            <TransitionAlerts
+              text="Su cuenta ha sido activada con éxito. Ya puede iniciar sesión"
+              color="success"
+              severity="success"
+              open={true}
+              variant="outlined"
+            />
+          )}
 
           {mutation.isError && (
             <TransitionAlerts
