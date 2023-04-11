@@ -1,5 +1,4 @@
 import CircularProgress from "@mui/material/CircularProgress";
-import "./styles/index.css";
 import Box from "@mui/material/Box";
 
 const SpinnerSuspense = () => {

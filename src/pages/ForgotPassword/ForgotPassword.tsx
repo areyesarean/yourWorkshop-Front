@@ -1,23 +1,18 @@
-import { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { Visibility, VisibilityOff, Email } from "@mui/icons-material";
+import { Email } from "@mui/icons-material";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import { Copyright } from "../../components/Copyright";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
 import axios, { AxiosError } from "axios";
-import { login } from "../../redux/slices/AuthSlice";
 import { FormControlInput } from "../../components/FormControlInput";
 import { useMutation } from "@tanstack/react-query";
 import { ApiError, Response } from "../../types/types";
@@ -35,22 +30,12 @@ const schema = yup
       .matches(/^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/, {
         message: "Debe especificar un correo electrónico válido",
       }),
-    password: yup
-      .string()
-      .required("Debe ingresar su contraseña")
-      .min(8, "La contraseña debe tener un mínimo de 8 caracteres"),
   })
   .required();
 
 type FormData = yup.InferType<typeof schema>;
 
-const Login = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [cause, _] = useState(() =>
-    new URL(`${window.document.location}`).searchParams.get("cause")
-  );
-
-  const dispatch = useDispatch();
+const ForgotPassword = () => {
   const {
     register,
     handleSubmit,
@@ -61,10 +46,10 @@ const Login = () => {
 
   const mutation = useMutation<Response, AxiosError<ApiError>, FormData>({
     mutationFn: (loginData) => {
-      return axios.post(`${baseUrl}/login`, loginData);
+      return axios.patch(`${baseUrl}/request-reset-password`, loginData);
     },
     onSuccess: (data) => {
-      dispatch(login({ access_token: data.data.access_token }));
+      console.log(data)
     },
   });
 
@@ -72,7 +57,6 @@ const Login = () => {
     mutation.mutate(data);
   };
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
@@ -95,29 +79,33 @@ const Login = () => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Iniciar sesión
+            Recuperar contraseña
           </Typography>
 
-          {cause === "activate-account" && (
+          {mutation.isError && (
             <TransitionAlerts
-              text="Su cuenta ha sido activada con éxito. Ya puede iniciar sesión"
-              color="success"
-              severity="success"
+              text={
+                mutation.error?.response?.data?.message === "User not found"
+                  ? "El correo ingresado es incorrecto o no existe en nuestro sistema."
+                  : mutation.error?.response?.data?.message ??
+                    (mutation.error?.message === "Network Error"
+                      ? "Upss! ha ocurrido un error de red"
+                      : mutation.error?.message)
+              }
+              color="default"
+              severity="error"
               open={true}
               variant="outlined"
             />
           )}
 
-          {mutation.isError && (
+          {mutation.isSuccess && (
             <TransitionAlerts
-              text={
-                mutation.error?.response?.data?.message ??
-                (mutation.error?.message === "Network Error"
-                  ? "Upss! ha ocurrido un error de red"
-                  : mutation.error?.message)
-              }
-              color="default"
-              severity="error"
+              text="Hemos enviado con éxito un enlace a su correo electrónico 
+                    para recuperar su contraseña. Por favor revise su bandeja 
+                    de entrada."
+              color="success"
+              severity="success"
               open={true}
               variant="outlined"
             />
@@ -132,10 +120,10 @@ const Login = () => {
             <FormControlInput
               name="email"
               inputType="email"
-              labelText="Correo"
+              labelText="Correo de recuperación"
               autoFocus={true}
               register={register("email")}
-              labelInput="email"
+              labelInput="Correo de recuperación"
               showError={errors.email !== undefined ? true : false}
               errorMessage={errors.email?.message}
             >
@@ -146,46 +134,19 @@ const Login = () => {
               </InputAdornment>
             </FormControlInput>
 
-            <FormControlInput
-              name="password"
-              inputType={showPassword ? "text" : "password"}
-              labelText="Contraseña"
-              register={register("password")}
-              labelInput="password"
-              showError={errors.password !== undefined ? true : false}
-              errorMessage={errors.password?.message}
-            >
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            </FormControlInput>
-
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Recordarme"
-            />
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Acceder
+              Recuperar Contraseña
             </Button>
             <Grid container>
-              <Grid item xs={12} md={6} lg={6} sm={6}>
-                <Link to={`/${PublicRoute.FORGOT_PASSWORD}`}>
-                  Olvidó su contraseña?
-                </Link>
+              <Grid item xs={12} md={5} lg={5} sm={5}>
+                <Link to={`/${PublicRoute.LOGIN}`}>Iniciar Sesión</Link>
               </Grid>
-              <Grid item xs={12} md={6} lg={6} sm={6}>
+              <Grid item xs={12} md={7} lg={7} sm={7}>
                 <Link to={`/${PublicRoute.CREATE_ACCOUNT}`}>
                   {"No tienes cuenta? Crea una"}
                 </Link>
@@ -199,4 +160,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgotPassword;

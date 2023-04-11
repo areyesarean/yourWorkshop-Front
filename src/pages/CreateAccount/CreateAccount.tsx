@@ -1,21 +1,18 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { Visibility, VisibilityOff, Email } from "@mui/icons-material";
+import { Visibility, VisibilityOff, Email, Person } from "@mui/icons-material";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import { Copyright } from "../../components/Copyright";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
 import axios, { AxiosError } from "axios";
 import { login } from "../../redux/slices/AuthSlice";
 import { FormControlInput } from "../../components/FormControlInput";
@@ -35,6 +32,8 @@ const schema = yup
       .matches(/^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/, {
         message: "Debe especificar un correo electrónico válido",
       }),
+    name: yup.string().required("Debe especificar un nombre para su cuenta"),
+    lastName: yup.string().required("Debe ingresar sus apellidos"),
     password: yup
       .string()
       .required("Debe ingresar su contraseña")
@@ -44,13 +43,8 @@ const schema = yup
 
 type FormData = yup.InferType<typeof schema>;
 
-const Login = () => {
+const CreateAccount = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [cause, _] = useState(() =>
-    new URL(`${window.document.location}`).searchParams.get("cause")
-  );
-
-  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -60,11 +54,14 @@ const Login = () => {
   });
 
   const mutation = useMutation<Response, AxiosError<ApiError>, FormData>({
-    mutationFn: (loginData) => {
-      return axios.post(`${baseUrl}/login`, loginData);
+    mutationFn: (createAccountData) => {
+      return axios.post(`${baseUrl}/user`, {
+        ...createAccountData,
+        rol: "USER",
+      });
     },
     onSuccess: (data) => {
-      dispatch(login({ access_token: data.data.access_token }));
+      //dispatch(login({ access_token: data.data.access_token }));
     },
   });
 
@@ -95,18 +92,8 @@ const Login = () => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Iniciar sesión
+            Crear cuenta
           </Typography>
-
-          {cause === "activate-account" && (
-            <TransitionAlerts
-              text="Su cuenta ha sido activada con éxito. Ya puede iniciar sesión"
-              color="success"
-              severity="success"
-              open={true}
-              variant="outlined"
-            />
-          )}
 
           {mutation.isError && (
             <TransitionAlerts
@@ -123,19 +110,31 @@ const Login = () => {
             />
           )}
 
+          {mutation.isSuccess && (
+            <TransitionAlerts
+              text="Su cuenta ha sido creada con éxito.
+              Hemos enviado un correo con un enlace para que pueda activarla. Por favor revise su correo electrónico"
+              color="success"
+              severity="success"
+              open={true}
+              variant="outlined"
+            />
+          )}
+
           <Box
             component="form"
             onSubmit={handleSubmit(onSubmit)}
             noValidate
             sx={{ mt: 1 }}
           >
+            {/* //? INPUT EMAIL */}
             <FormControlInput
               name="email"
               inputType="email"
-              labelText="Correo"
+              labelText="Correo electrónico"
               autoFocus={true}
               register={register("email")}
-              labelInput="email"
+              labelInput="Correo electrónico"
               showError={errors.email !== undefined ? true : false}
               errorMessage={errors.email?.message}
             >
@@ -146,12 +145,47 @@ const Login = () => {
               </InputAdornment>
             </FormControlInput>
 
+            {/* //? INPUT NAME */}
+            <FormControlInput
+              name="name"
+              inputType="name"
+              labelText="Nombre"
+              register={register("name")}
+              labelInput="Nombre"
+              showError={errors.name !== undefined ? true : false}
+              errorMessage={errors.name?.message}
+            >
+              <InputAdornment position="end">
+                <IconButton onMouseDown={handleMouseDownPassword} edge="end">
+                  <Person aria-disabled />
+                </IconButton>
+              </InputAdornment>
+            </FormControlInput>
+
+            {/* //? INPUT LAST-NAME */}
+            <FormControlInput
+              name="lastName"
+              inputType="lastName"
+              labelText="Apellidos"
+              register={register("lastName")}
+              labelInput="Apellidos"
+              showError={errors.lastName !== undefined ? true : false}
+              errorMessage={errors.lastName?.message}
+            >
+              <InputAdornment position="end">
+                <IconButton onMouseDown={handleMouseDownPassword} edge="end">
+                  <Person aria-disabled />
+                </IconButton>
+              </InputAdornment>
+            </FormControlInput>
+
+            {/* //? INPUT PASSWORD */}
             <FormControlInput
               name="password"
               inputType={showPassword ? "text" : "password"}
               labelText="Contraseña"
               register={register("password")}
-              labelInput="password"
+              labelInput="Contraseña"
               showError={errors.password !== undefined ? true : false}
               errorMessage={errors.password?.message}
             >
@@ -167,36 +201,35 @@ const Login = () => {
               </InputAdornment>
             </FormControlInput>
 
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Recordarme"
-            />
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Acceder
+              Crear cuenta
             </Button>
             <Grid container>
-              <Grid item xs={12} md={6} lg={6} sm={6}>
-                <Link to={`/${PublicRoute.FORGOT_PASSWORD}`}>
-                  Olvidó su contraseña?
-                </Link>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6} sm={6}>
-                <Link to={`/${PublicRoute.CREATE_ACCOUNT}`}>
-                  {"No tienes cuenta? Crea una"}
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <Link to={`/${PublicRoute.LOGIN}`}>
+                  {"Tienes una cuenta? Inicia sesión"}
                 </Link>
               </Grid>
             </Grid>
           </Box>
         </Box>
-        <Copyright />
+        <Copyright mb={10} />
       </Container>
     </>
   );
 };
 
-export default Login;
+export default CreateAccount;

@@ -3,6 +3,7 @@ export const PublicRoute = {
   LOGIN: "login",
   FORGOT_PASSWORD: "forgot-password",
   CREATE_ACCOUNT: "create-account",
+  CHANGE_PASSWORD_BY_FORGOT_PASS: "change-password/:resetPasswordToken",
 };
 
 export const PrivateRoute = {
