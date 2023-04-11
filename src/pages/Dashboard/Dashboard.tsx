@@ -13,8 +13,11 @@ import Badge from "@mui/material/Badge";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import ExitToApp from "@mui/icons-material/ExitToApp";
 import { mainListItems, secondaryListItems } from "../../components/ListItems";
 import { Outlet } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../../redux/slices/AuthSlice";
 
 const drawerWidth: number = 240;
 
@@ -67,9 +70,14 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 function DashboardContent() {
+  const dispatch = useDispatch();
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
+  };
+
+  const handleLoggout = () => {
+    dispatch(logout());
   };
 
   return (
@@ -106,6 +114,13 @@ function DashboardContent() {
             <Badge badgeContent={4} color="secondary">
               <NotificationsIcon />
             </Badge>
+          </IconButton>
+          <IconButton
+            color="inherit"
+            title="Cerrar Sesion"
+            onClick={handleLoggout}
+          >
+            <ExitToApp />
           </IconButton>
         </Toolbar>
       </AppBar>
