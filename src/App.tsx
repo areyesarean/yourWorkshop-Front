@@ -7,7 +7,7 @@ import { SpinnerSuspense } from "./components/SpinnerSuspense";
 
 const darkTheme = createTheme({
   typography: {
-    fontFamily: "Lilex",
+    fontFamily: "Inconsolata",
   },
   palette: {
     mode: "dark",
