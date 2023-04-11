@@ -37,10 +37,15 @@ const Admin = () => {
               p: 2,
               display: "flex",
               flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
               height: 240,
             }}
           >
             {/* <Deposits /> */}
+            <Typography component="h1" variant="h1" color="inherit" noWrap>
+              2
+            </Typography>
           </Paper>
         </Grid>
         {/* Recent Orders */}
