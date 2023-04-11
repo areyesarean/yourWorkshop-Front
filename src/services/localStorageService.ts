@@ -30,3 +30,15 @@ export const getPayloadFromTokenInLocalStorage = (): Payload | null => {
 export const getPayloadFromToken = (token: string): Payload => {
   return JSON.parse(atob(token.split(".")[1]));
 };
+
+export const getEmailFromLocalStorage = (): string => {
+  return window.localStorage.getItem("remember-email") ?? "";
+};
+
+export const setEmailFromLocalStorage = (email: string): void => {
+  window.localStorage.setItem("remember-email", email);
+};
+
+export const removeEmailFromLocalStorage = (): void => {
+  window.localStorage.removeItem("remember-email");
+};

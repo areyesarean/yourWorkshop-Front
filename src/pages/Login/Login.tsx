@@ -26,6 +26,11 @@ import { TransitionAlerts } from "../../components/Alert";
 import { SpinnerLinear } from "../../components/SpinnerLinear";
 import { Link } from "react-router-dom";
 import { PublicRoute } from "../../routes/paths";
+import {
+  getEmailFromLocalStorage,
+  removeEmailFromLocalStorage,
+  setEmailFromLocalStorage,
+} from "../../services/localStorageService";
 
 const schema = yup
   .object({
@@ -45,8 +50,11 @@ const schema = yup
 type FormData = yup.InferType<typeof schema>;
 
 const Login = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [cause, _] = useState(() =>
+  const [remember, setRemember] = useState<boolean>(
+    () => getEmailFromLocalStorage() !== ""
+  );
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [cause, _] = useState<string | null>(() =>
     new URL(`${window.document.location}`).searchParams.get("cause")
   );
 
@@ -57,16 +65,31 @@ const Login = () => {
     formState: { errors },
   } = useForm<FormData>({
     resolver: yupResolver(schema),
+    defaultValues: {
+      email: getEmailFromLocalStorage(),
+    },
   });
 
   const mutation = useMutation<Response, AxiosError<ApiError>, FormData>({
     mutationFn: (loginData) => {
       return axios.post(`${baseUrl}/login`, loginData);
     },
-    onSuccess: (data) => {
+    onSuccess: (data, { email }) => {
+      if (remember) {
+        setEmailFromLocalStorage(email);
+      }
       dispatch(login({ access_token: data.data.access_token }));
     },
   });
+
+  const handleRemember = () => {
+    setRemember((remember) => {
+      if (!remember === false) {
+        removeEmailFromLocalStorage();
+      }
+      return !remember;
+    });
+  };
 
   const onSubmit = (data: FormData) => {
     mutation.mutate(data);
@@ -168,7 +191,13 @@ const Login = () => {
             </FormControlInput>
 
             <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
+              control={
+                <Checkbox
+                  checked={remember}
+                  color="primary"
+                  onChange={handleRemember}
+                />
+              }
               label="Recordarme"
             />
             <Button
