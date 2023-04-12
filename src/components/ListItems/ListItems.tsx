@@ -8,39 +8,26 @@ import PeopleIcon from "@mui/icons-material/People";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import LayersIcon from "@mui/icons-material/Layers";
 import AssignmentIcon from "@mui/icons-material/Assignment";
+import { PrivateRoute } from "../../routes/paths";
+import { AppLink } from "../AppLink";
 
 export const mainListItems = (
   <>
-    <ListItemButton>
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <ListItemText primary="Dashboard" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <ShoppingCartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Pedidos" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <PeopleIcon />
-      </ListItemIcon>
-      <ListItemText primary="Clientes" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <BarChartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Reportes" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <LayersIcon />
-      </ListItemIcon>
-      <ListItemText primary="Integraciones" />
-    </ListItemButton>
+    <AppLink to={PrivateRoute.ADMIN} title="Dashboard">
+      <DashboardIcon />
+    </AppLink>
+    <AppLink to={PrivateRoute.USER_LIST} accessRol="ADMIN" title="Usuarios">
+      <PeopleIcon />
+    </AppLink>
+    <AppLink to="clientes" title="Ventas">
+      <ShoppingCartIcon />
+    </AppLink>
+    <AppLink to="reportes" title="Reportes">
+      <BarChartIcon />
+    </AppLink>
+    <AppLink to="equipos" title="Equipos">
+      <LayersIcon />
+    </AppLink>
   </>
 );
 
