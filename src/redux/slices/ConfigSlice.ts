@@ -17,7 +17,7 @@ export const ConfigSlice = createSlice({
   name: "config",
   initialState,
   reducers: {
-    setDarkMode: (state, action) => {
+    setDarkMode: (state) => {
       state.darkMode = true;
       setDarkModeFromLocalStorage("true");
     },
