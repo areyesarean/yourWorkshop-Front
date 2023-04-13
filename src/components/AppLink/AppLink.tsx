@@ -37,7 +37,11 @@ const AppLink = ({
       to={to}
       style={({ isActive, isPending }) => {
         return {
-          color: isActive ? theme.palette.primary.main : "white",
+          color: isActive
+            ? theme.palette.primary.main
+            : theme.palette.mode === "dark"
+            ? "white"
+            : "black",
           textDecoration: "none",
         };
       }}
