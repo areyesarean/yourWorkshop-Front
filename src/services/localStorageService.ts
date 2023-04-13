@@ -42,3 +42,16 @@ export const setEmailFromLocalStorage = (email: string): void => {
 export const removeEmailFromLocalStorage = (): void => {
   window.localStorage.removeItem("remember-email");
 };
+
+export const getDarkModeFromLocalStorage = (): boolean => {
+  return Boolean(window.localStorage.getItem("dark-mode"));
+};
+
+export const setDarkModeFromLocalStorage = (value: string): void => {
+  window.localStorage.setItem("dark-mode", value);
+};
+
+export const removeDarkModeFromLocalStorage = (): void => {
+  window.localStorage.removeItem("dark-mode");
+};
+
