@@ -4,20 +4,25 @@ import { router } from "./routes/router";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { SpinnerSuspense } from "./components/SpinnerSuspense";
+import { useSelector } from "react-redux";
+import { RootState } from "./redux/store";
 
-const darkTheme = createTheme({
-  typography: {
-    fontFamily: "Inconsolata",
-  },
-  palette: {
-    mode: "dark",
-    primary: {
-      main: "#5DFDCB",
-    },
-  },
-});
 
 function App() {
+  const darkMode = useSelector((state: RootState) => state.config.darkMode);
+
+  const darkTheme = createTheme({
+    typography: {
+      fontFamily: "Inconsolata",
+    },
+    palette: {
+      mode: darkMode ? "dark" : "light",
+      primary: {
+        main: "#5DFDCB",
+      },
+    },
+  });
+
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
