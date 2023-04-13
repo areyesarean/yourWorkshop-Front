@@ -9,6 +9,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import ExitToApp from "@mui/icons-material/ExitToApp";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/slices/AuthSlice";
+import { SwitchDarkLight } from "../Switch";
 
 const drawerWidth: number = 240;
 
@@ -74,6 +75,7 @@ function AppBarCustom({ toggleDrawer, open }: AppBarCustomProps) {
         >
           Tu taller
         </Typography>
+        <SwitchDarkLight />
         <IconButton color="inherit">
           <Badge badgeContent={4} color="secondary">
             <NotificationsIcon />
