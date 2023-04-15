@@ -47,6 +47,11 @@ export const getDarkModeFromLocalStorage = (): boolean => {
   return Boolean(window.localStorage.getItem("dark-mode"));
 };
 
+/**
+ * La funcion acepta un @param: boolean en funcion de 
+ * si esta activo o no el modo oscuro
+ */
+
 export const setDarkModeFromLocalStorage = (value: string): void => {
   window.localStorage.setItem("dark-mode", value);
 };
