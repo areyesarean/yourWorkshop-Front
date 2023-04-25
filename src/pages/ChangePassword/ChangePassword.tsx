@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { Visibility, VisibilityOff, Email, Person } from "@mui/icons-material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import { Copyright } from "../../components/Copyright";
@@ -14,7 +14,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import axios, { AxiosError } from "axios";
-import { login } from "../../redux/slices/AuthSlice";
 import { FormControlInput } from "../../components/FormControlInput";
 import { useMutation } from "@tanstack/react-query";
 import { ApiError, Response } from "../../types/types";
@@ -47,7 +46,7 @@ const ChangePassword = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
   const response = useLoaderData();
-  const params = useParams()
+  const params = useParams();
   const {
     register,
     handleSubmit,
@@ -56,7 +55,7 @@ const ChangePassword = () => {
     resolver: yupResolver(schema),
   });
   console.log(response);
-  
+
   const mutation = useMutation<Response, AxiosError<ApiError>, FormData>({
     mutationFn: (data) => {
       return axios.patch(`${baseUrl}/reset-password`, {
@@ -64,14 +63,11 @@ const ChangePassword = () => {
         newPassword: data.repeatPassword,
       });
     },
-    onSuccess: (data) => {
-      //dispatch(login({ access_token: data.data.access_token }));
-    },
   });
 
   const onSubmit = (data: FormData) => {
     console.log(data);
-    
+
     mutation.mutate(data);
   };
 

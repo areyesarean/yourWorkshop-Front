@@ -14,7 +14,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import axios, { AxiosError } from "axios";
-import { login } from "../../redux/slices/AuthSlice";
 import { FormControlInput } from "../../components/FormControlInput";
 import { useMutation } from "@tanstack/react-query";
 import { ApiError, Response } from "../../types/types";

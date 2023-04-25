@@ -9,14 +9,14 @@ import { MainMenu } from "../../components/MainMenu";
 function DashboardContent() {
   const [open, setOpen] = useState(true);
   const toggleDrawer = () => {
-    setOpen(!open);
+    setOpen((open) => !open);
   };
 
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBarCustom toggleDrawer={toggleDrawer} open={open} />
-      <MainMenu toggleDrawer={toggleDrawer} open={open}/>
+      <MainMenu toggleDrawer={toggleDrawer} open={open} />
       <Box
         component="main"
         sx={{
